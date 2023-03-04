@@ -1,1 +1,1 @@
-# Birth-Death-Move-process-with-mutations
+# Birth-Death-Move-process-generator-for-bioimaging
