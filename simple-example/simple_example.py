@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Feb 28 23:33:56 2023
-
 @author: lisabalsollier
 """
+
+"""You will find in this file all the necessary programs to generate with 
+the functions of process.py file, a simple example of BDM process."""
+
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -18,10 +20,10 @@ import draw
 
 
 
-s1=0.01 #drift of the Brownian motion
+s1=0.02 #drift of the Brownian motion
 
 
-T=5 #final time of the simulation
+T=10 #final time of the simulation
 
 d=0.1 # size of the time discretization between 2 images
 
@@ -29,7 +31,8 @@ Delta=1 # Delta of the alogrithm
 
 
 
-
+"""this program defines the motion of the particles between jumps,
+in this example, it is a Brownian motion"""
 def move(t,x,y,r,c,d) :
     """
     Parameters
@@ -136,7 +139,7 @@ def transitionkernel(start):
 
 
 
-
+"""this program generates a random initial situation"""
 def generatesituation(M):
     """
     Parameters
@@ -172,7 +175,7 @@ def generatesituation(M):
 
 b=process.proctotal(T,10,d, Delta, generatesituation, move, beta, delta, tau, alpha, birthkernel, deathkernel, transitionkernel) 
     
-
+#to draw the simulation as a movie
 draw.drawsimpleex(b)
 
 

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Feb 28 22:51:49 2023
-
 @author: lisabalsollier
 """
+
+"""You will find in this file all the necessary programs to generate 
+the process."""
 
 
 import matplotlib.pyplot as plt
@@ -15,6 +16,7 @@ import csv
 import math
 
 
+"""this program gives the regime of the particle x, 1 for brownian, 2 for superdiffusive and 3 for subdiffusive"""
 def typee(z):
     """
     Parameters
@@ -32,7 +34,9 @@ def typee(z):
         return(int(z)) 
     else :
         return(2)
-
+    
+    
+"""number of particles in the configuration x"""
 def n(x):
     """
     Parameters
@@ -48,7 +52,7 @@ def n(x):
     return(int(len(x)/4))
 
 
-
+"""number of Rab11 particles in the configuration x"""
 def nr(x):
     """
     Parameters
@@ -63,6 +67,8 @@ def nr(x):
     """
     return(len(x[2::4][x[2::4]==1]))
 
+
+"""number of Langerin particles in the configuration x"""
 def nl(x):
     """
     Parameters
@@ -77,6 +83,9 @@ def nl(x):
     """
     return(len(x[2::4][x[2::4]==0]))
 
+
+
+"""number of Langerin brownian particles in the configuration x"""
 def nlb(x):
     choix=[]
     for ch in x[2::4]==0  :
@@ -85,6 +94,7 @@ def nlb(x):
     return(len(y[3::4][y[3::4]==1]))
 
 
+"""number of Langerin superdiffusive particles in the configuration x"""
 def nlsp(x):
     choix=[]
     for ch in x[2::4]==0  :
@@ -93,6 +103,8 @@ def nlsp(x):
     #choix2=[typee(y[3::4][i])==2 for i in range(len(y[3::4]))]
     return(len(y[3::4][np.array([typee(y[3::4][i])==2 for i in range(len(y[3::4]))])]))
 
+
+"""number of Langeirn subdiffusive particles in the configuration x"""
 def nlsb(x):
     choix=[]
     for ch in x[2::4]==0  :
@@ -101,6 +113,7 @@ def nlsb(x):
     return(len(y[3::4][y[3::4]==3]))
 
 
+"""number of Rab11 brownian particles in the configuration x"""
 def nrb(x):
     choix=[]
     for ch in x[2::4]==1  :
@@ -109,6 +122,7 @@ def nrb(x):
     return(len(y[3::4][y[3::4]==1]))
 
 
+"""number of Rab11 superdiffusive particles in the configuration x"""
 def nrsp(x):
     choix=[]
     for ch in x[2::4]==1  :
@@ -117,6 +131,8 @@ def nrsp(x):
     #choix2=[typee(y[3::4][i])==2 for i in range(len(y[3::4]))]
     return(len(y[3::4][np.array([typee(y[3::4][i])==2 for i in range(len(y[3::4]))])]))
 
+
+"""number of Rab11 subdiffusive particles in the configuration x"""
 def nrsb(x):
     choix=[]
     for ch in x[2::4]==1  :
@@ -128,7 +144,7 @@ def nrsb(x):
 
 
 """This programm below is used to compute the integral necessary to generate the jump time density"""
-def integrale(res,ecarts) :
+def integrale(res,ecarts, alpha) :
     s=0
     for i in range(len(ecarts)-1):
         s+= ((alpha(res[i,:])+alpha(res[i+1,:]))/2)*ecarts[i]
@@ -136,28 +152,30 @@ def integrale(res,ecarts) :
     return(s)
 
 """This program gives us the value of the jump time density at point s"""
-def densityf(p,res,ecarts,tps,s):
+def densityf(p,res,ecarts,tps,s, alpha):
     i=len(tps[s>=tps])-1
-    a=(1/(1-p))*alpha(res[i,:])*np.exp(-integrale(res[:i+1,:],ecarts[:i+1]))
+    a=(1/(1-p))*alpha(res[i,:])*np.exp(-integrale(res[:i+1,:],ecarts[:i+1], alpha))
     if i<len(tps)-1 :
-        b=(1/(1-p))*alpha(res[i+1,:])*np.exp(-integrale(res[:i+2,:],ecarts[:i+2]))
+        b=(1/(1-p))*alpha(res[i+1,:])*np.exp(-integrale(res[:i+2,:],ecarts[:i+2], alpha))
         return((a+b)/2)
     else :
         return(a)
         
 """This program allows to simulate a value according to the jump time law."""
-def drawlaw(p,res,ecarts,tps,tpsmax):
+def drawlaw(p,res,ecarts,tps,tpsmax, alpha):
     tabf=[]
     for i in range(len(ecarts)-1):
-        tabf+=[(1/(1-p))*alpha(res[i,:])*np.exp(-integrale(res[:i+1,:],ecarts[:i+1]))]
+        tabf+=[(1/(1-p))*alpha(res[i,:])*np.exp(-integrale(res[:i+1,:],ecarts[:i+1], alpha))]
     M=np.max(tabf)
     U=stats.uniform.rvs(0,tpsmax)
     V=stats.uniform.rvs(0,M)
-    while V>=densityf(p,res,ecarts,tps,U) :
+    while V>=densityf(p,res,ecarts,tps,U, alpha) :
         U=stats.uniform.rvs(0,tpsmax)
         V=stats.uniform.rvs(0,M)
     return(U)
 
+
+"""global program to generate the BDM process """
 def proctotal(T,M,d, Delta, generatesituation, move, beta, delta, tau, alpha, birthkernel, deathkernel, transitionkernel):   
     """
     Parameters
@@ -238,7 +256,7 @@ def proctotal(T,M,d, Delta, generatesituation, move, beta, delta, tau, alpha, bi
                 res=np.vstack((res,resk[:-1,:]))
                 ecarts+=ecartsk
                 tps=np.concatenate((tps,tps[-1]+tpsk[1:])) 
-            p=np.exp(-integrale(resk,ecartsk))
+            p=np.exp(-integrale(resk,ecartsk, alpha))
             U=stats.uniform.rvs(loc=0,scale=1)
             if U<=p:
                 if Deltaj==T-Tj-(k-1)*Delta:
@@ -258,7 +276,7 @@ def proctotal(T,M,d, Delta, generatesituation, move, beta, delta, tau, alpha, bi
             else:
                 #print('jesuisla')
                 #print(Deltaj)
-                tauj=(k-1)*Delta+drawlaw(p,resk,ecartsk,tpsk,Deltaj)#+(k-1)*Delta)
+                tauj=(k-1)*Delta+drawlaw(p,resk,ecartsk,tpsk,Deltaj, alpha)#+(k-1)*Delta)
                 Tj+=tauj
                 #print(Tj)
                 TpsSauts+=[Tj]

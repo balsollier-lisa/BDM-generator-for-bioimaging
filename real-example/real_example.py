@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed Mar  1 00:43:08 2023
-
 @author: lisabalsollier
 """
 
+"""
+You will find in this file all the necessary programs to generate with the 
+functions of process.py file, a simulation of BDM which approaches the real data.
+This file was used to generate the simulations presented in the article.
+"""
 
 
 import matplotlib.pyplot as plt
@@ -19,42 +22,32 @@ import process
 import draw
 
 
-#est coeff diff lang lisa
-with open('/Users/lisabalsollier/Documents/Thèse/données Lisa/estcoeflang.pickle', 'rb') as handle:
-    brlang, splangdiff, splangdrift = pickle.load(handle)
+#we import the data from the real dataset
 
-with open('/Users/lisabalsollier/Documents/Thèse/données Lisa/estcoefrab.pickle', 'rb') as handle:
-    brrab, sprabdiff, sprabdrift  = pickle.load(handle)
+#for Langerin particles
+with open('estcoeflang.pickle', 'rb') as handle:
+    brlang, splangdiff, splangdrift = pickle.load(handle)
     
-with open('/Users/lisabalsollier/Documents/Thèse/données Lisa/angledev.pickle', 'rb') as handle:
+with open('angledev.pickle', 'rb') as handle:
     angledev  = pickle.load(handle)
 
-
-#est moyenne lisa
-s1lang=1.1 #diffusion coefficient in the brownian move
-s2lang=1.2 #diffusion coefficient in the superdiffusive move
 s3lang=0.78 #diffusion coefficient in the subdiffusive move
+lalang=5.96 #  
 
-drlang=1.44
-lalang=5.96
+# for rab11 particles
+with open('estcoefrab.pickle', 'rb') as handle:
+    brrab, sprabdiff, sprabdrift  = pickle.load(handle)
+    
+s3rab=1.19 #diffusion coefficient in the subdiffusive move    
+larab=7.41 #coefficient in the Ornstein-Uhlenbeck process of subdiffusive move
 
-s1rab=1.64
-s2rab=1.68 #diffusion coefficient in the superdiffusive move
-s3rab=1.19 #diffusion coefficient in the subdiffusive move
 
-drrab=2.06
-larab=7.41
 
-pr=[0.605,0.034,0.361] #proportions of brownian, superdiffusive, subdiffusive Rab11 (in this order)
-pl=[0.635,0.119,0.246] #proportions of brownian, superdiffusive, subdiffusive Langerin (in this order)
-
-prbirth=(1/2.98)*np.array([2.34,0.14,0.5])
-plbirth=(1/4.45)*np.array([3.59,0.47,0.39])
+prbirth=(1/2.98)*np.array([2.34,0.14,0.5]) #proportions for the birth of brownian, superdiffusive, subdiffusive Rab11 (in this order)
+plbirth=(1/4.45)*np.array([3.59,0.47,0.39]) #proportions for the birth of brownian, superdiffusive, subdiffusive Langerin (in this order)
 X0=np.array([97,141.2])
 
 
-#dr=1 #drift coefficient in the superdiffusive move
-#la=1 # coefficient in the Ornstein-Uhlenbeck process of subdiffusive move
 
 T=167.86 #final time of the simulation
 
@@ -66,22 +59,19 @@ q=0.069 #parameter that rules the uniform birth in the birth kernel
 
 
 
-#on charge les données du tour de la cellule
+#we load the data of the cell tour
 
-with open('/Users/lisabalsollier/Documents/Thèse/données Lisa/maskc.pickle', 'rb') as handle:
-    imgmod = pickle.load(handle)    
+with open('maskc.pickle', 'rb') as handle:
+    imgmod = pickle.load(handle)  
 
-
-with open('/Users/lisabalsollier/Documents/Thèse/données Lisa/xcontour.pickle', 'rb') as handle:
+with open('xcontour.pickle', 'rb') as handle:
     xcontour = pickle.load(handle)  
 
-with open('/Users/lisabalsollier/Documents/Thèse/données Lisa/ycontour.pickle', 'rb') as handle:
+with open('ycontour.pickle', 'rb') as handle:
     ycontour = pickle.load(handle)  
 
 
-
-
-
+"""this program allows to say if a point is in the cell"""
 def beincell(x):
     if np.floor(x[0])<=0 or np.floor(x[0])+1>=250:
         return(0)
@@ -98,7 +88,7 @@ def beincell(x):
     return(int(imgmod[i][j][0]))
 
 
-
+"""this program generates a random initial situation"""
 def generatesituation(M):
     """
     Parameters
@@ -150,6 +140,8 @@ def generatesituation(M):
     return(X,Y,R,C,track,cpttrack)
 
 
+"""this program generates a Brownian motion of diffusion coefficient s1lang 
+or s1rab with as initial position the point (xi,yi,ri,ci)"""
 def brownianmove(xi,yi,ri,ci,ecarts,N,s1lang,s1rab):
     if ri==0 :
         normx=stats.norm.rvs(loc=0, scale=s1lang*np.sqrt(np.array(ecarts)))
@@ -201,7 +193,9 @@ def brownianmove(xi,yi,ri,ci,ecarts,N,s1lang,s1rab):
     return(xx,yy,rr,cc)
 
 
-
+"""this program generates a subdiffusive move with diffusion coefficient 
+s3lang or s3rab and attraction coefficient lalang or larab 
+with as initial position the point (xi,yi,ri,ci)"""
 def subdiffusifmove(xi,yi,ri,ci,ecarts,tps,N,s3lang,s3rab, lalang, larab):
     if ri==0:
         normx=stats.norm.rvs(loc=0, scale=s3lang*np.sqrt(np.array(ecarts)))
@@ -254,7 +248,9 @@ def subdiffusifmove(xi,yi,ri,ci,ecarts,tps,N,s3lang,s3rab, lalang, larab):
     return(xx,yy,rr,cc)
 
 
-
+"""this program generates a subdiffusive move with diffusion coefficient 
+s3lang or s3rab and drift coefficient drlang or drrab 
+with as initial position the point (xi,yi,ri,ci)"""
 def superdiffusifmove(xi,yi,ri,ci,ecarts,N,s2lang,s2rab,drlang, drrab):
     if ri==0:
         normx=stats.norm.rvs(loc=0, scale=s2lang*np.sqrt(np.array(ecarts)))
@@ -313,13 +309,8 @@ def superdiffusifmove(xi,yi,ri,ci,ecarts,N,s2lang,s2rab,drlang, drrab):
     rr=[ri]*(N)
     return(xx,yy,rr,cc)
 
-def typee(z):
-    if z==1 or z==3 :
-        return(int(z)) 
-    else :
-        return(2)
 
-
+"""this program generates the motion of a particle up to time t according to its coordinate c"""
 def move(t,x,y,r,c,d) :
     """
     Parameters
@@ -369,11 +360,11 @@ def move(t,x,y,r,c,d) :
             #print('sub1')
             #xx,yy,rr,cc=subdiffusifmove(x[i],y[i],r[i],c[i],ecarts,tps,N,np.sqrt(np.random.choice(sblangdiff)),np.sqrt(np.random.choice(sbrabdiff)),np.random.choice(sblanglb), np.random.choice(sblanglb))
             #xx,yy,rr,cc=subdiffusifmove(x[i],y[i],r[i],c[i],ecarts,tps,N,np.sqrt(np.random.choice(sblangdiff)),np.sqrt(np.random.choice(sbrabdiff)),lalang, larab)
-            xx,yy,rr,cc=subdiffusifmove(x[i],y[i],r[i],c[i],ecarts,tps,N,s3lang,s3rab,lalang, larab)
+            xx,yy,rr,cc=subdiffusifmove(x[i],y[i],r[i],c[i],ecarts,tps,N,s3lang/2,s3rab/2,lalang, larab)
             #print('sub2')
         else :
             #print('sup1')
-            xx,yy,rr,cc=superdiffusifmove(x[i],y[i],r[i],c[i],ecarts,N,np.sqrt(np.random.choice(splangdiff)),np.sqrt(np.random.choice(sprabdiff)), np.random.choice(splangdrift), np.random.choice(sprabdrift))
+            xx,yy,rr,cc=superdiffusifmove(x[i],y[i],r[i],c[i],ecarts,N,np.sqrt(np.random.choice(splangdiff))/2,np.sqrt(np.random.choice(sprabdiff))/2, np.random.choice(splangdrift), np.random.choice(sprabdrift))
             #xx,yy,rr,cc=superdiffusifmove(x[i],y[i],r[i],c[i],ecarts,N,np.sqrt(np.random.choice(splangdiff)),np.sqrt(np.random.choice(sprabdiff)), drlang, drrab)
             #xx,yy,rr,cc=superdiffusifmove(x[i],y[i],r[i],c[i],ecarts,N,s2lang,s2rab, drlang, drrab)
             #print('sup2')
@@ -383,6 +374,7 @@ def move(t,x,y,r,c,d) :
         res[:,4*i+2]=rr
         #print(i==P-1)
     return(res,ecarts,tps)
+
 
 
 """birth intensity"""
@@ -409,39 +401,6 @@ def tau(x) :
     
 def alpha(x) :
     return(beta(x)+delta(x)+tau(x))  
-
-
-"""This programm below is used to compute the integral necessary to generate the jump time density"""
-def integrale(res,ecarts) :
-    s=0
-    for i in range(len(ecarts)-1):
-        s+= ((alpha(res[i,:])+alpha(res[i+1,:]))/2)*ecarts[i]
-    return(s)
-
-"""This program gives us the value of the jump time density at point s"""
-def densityf(p,res,ecarts,tps,s):
-    i=len(tps[s>=tps])-1
-    a=(1/(1-p))*alpha(res[i,:])*np.exp(-integrale(res[:i+1,:],ecarts[:i+1]))
-    if i<len(tps)-1 :
-        b=(1/(1-p))*alpha(res[i+1,:])*np.exp(-integrale(res[:i+2,:],ecarts[:i+2]))
-        return((a+b)/2)
-    else :
-        return(a)
-        
-"""This program allows to simulate a value according to the jump time law."""
-def drawlaw(p,res,ecarts,tps,tpsmax):
-    tabf=[]
-    for i in range(len(ecarts)-1):
-        tabf+=[(1/(1-p))*alpha(res[i,:])*np.exp(-integrale(res[:i+1,:],ecarts[:i+1]))]
-    M=np.max(tabf)
-    U=stats.uniform.rvs(0,tpsmax)
-    V=stats.uniform.rvs(0,M)
-    while V>=densityf(p,res,ecarts,tps,U) :
-        U=stats.uniform.rvs(0,tpsmax)
-        V=stats.uniform.rvs(0,M)
-    return(U)
-
-
 
 
 
@@ -520,44 +479,50 @@ def deathkernel(depart):
     The same array as in the input but without the coordinates of the dead center.
     """
     r=stats.uniform.rvs(0,1)
-    totder=0.18*process.nrb(depart)+0.22*process.nrsp(depart)+0.07*process.nrsb(depart)
-    totdel=0.15*process.nlb(depart)+0.1*process.nlsp(depart)+0.058*process.nlsb(depart)
+    totder=1.15*(0.18*process.nrb(depart)+0.22*process.nrsp(depart)+0.07*process.nrsb(depart))
+    totdel=1.15*(0.15*process.nlb(depart)+0.12*process.nlsp(depart)+0.058*process.nlsb(depart))
     if r<(totder/(totder+totdel)):
         R=1
         r2=stats.uniform.rvs(0,1)
-        if r2< ((0.18*process.nrb(depart))/totder):
+        if r2< ((1.15*0.18*process.nrb(depart))/totder):
             P=process.nrb(depart)
             typechoisi=1
-        elif r2< ((0.18*process.nrb(depart)+0.22*process.nrsp(depart))/totder):
+        elif r2< ((1.15*(0.18*process.nrb(depart)+0.22*process.nrsp(depart)))/totder):
             P=process.nrsp(depart)
             typechoisi=2
         else :
             P=process.nrsb(depart)
             typechoisi=3
+            #print('ici')
         i=stats.randint.rvs(1,P+1)
+        #print(P)
+        #print(i)
         m=0
         s=0
         while s<i and m<len(depart)/4:
-            if depart[4*m+2]== 1 and typee(depart[4*m+3])==typechoisi:
+            if depart[4*m+2]== 1 and process.typee(depart[4*m+3])==typechoisi:
                 s+=1
             m+=1
     else :
         R=0
         r2=stats.uniform.rvs(0,1)
-        if r2< ((0.15*process.nlb(depart))/totdel):
+        if r2< ((1.15*0.15*process.nlb(depart))/totdel):
             P=process.nlb(depart)
             typechoisi=1
-        elif r2< ((0.15*process.nlb(depart)+0.1*process.nlsp(depart))/totdel):
+        elif r2< ((1.15*(0.15*process.nlb(depart)+0.12*process.nlsp(depart)))/totdel):
             P=process.nlsp(depart)
             typechoisi=2
         else :
             P=process.nlsb(depart)
             typechoisi=3
+            #print('icii')
         i=stats.randint.rvs(1,P+1)
+        #print(P)
+        #print(i)
         m=0
         s=0
         while s<i and m<len(depart)/4:
-            if depart[4*m+2]== 0 and typee(depart[4*m+3])==typechoisi:
+            if depart[4*m+2]== 0 and process.typee(depart[4*m+3])==typechoisi:
                 s+=1
             m+=1
     C=depart[4*(m-1)+3]
@@ -567,7 +532,6 @@ def deathkernel(depart):
     tab[4*(m-1)+2]=False
     tab[4*(m-1)+3]=False
     return(depart[tab],R,C,m-1)
-
 
 
 """transition kernel"""
@@ -617,18 +581,20 @@ def transitionkernel(depart):
 
 
 b=process.proctotal(T,60,d, Delta, generatesituation, move, beta, delta, tau, alpha, birthkernel, deathkernel, transitionkernel) 
-(resfinal, TpsSauts,tabecarts,track,compteurs)=b 
+(resfinal,TpsSauts,tabecarts,track,compteurs,tracknaissance, trackmort) =b 
 
-(trajlang,tracktrajlang,trajmutantes,trajlangdec,couleurstrajlangdec, reslangtronqué, restronqué, tracktronqué)=draw.trajlangtronqué(tabecarts, resfinal, track)
+#(trajlang,tracktrajlang,trajmutantes,trajlangdec,couleurstrajlangdec, reslangtronque, restronque, tracktronque)=
+(trajlang,tracktrajlang,trajmutantes,trajlangdec,tracktrajlangdec,couleurstrajlangdec, reslangtronque, restronque, tracktronque)=draw.trajlangtronque(tabecarts, resfinal, track)
+
 
 #pour dessiner les trajectoires
-draw.dessintrajlang(trajlangdec,couleurstrajlangdec)    
+draw.dessintrajlang(trajlangdec,couleurstrajlangdec, xcontour, ycontour)    
 
 #pour dessiner le graphique du nombre de particules par frame
-draw.moyparframe(reslangtronqué)
+draw.moyparframe(reslangtronque)
 
 #pour dessiner les histogrammes des longueurs des trajectoires
 draw.longueurtraj(trajlang, trajmutantes)
 
 #pour dessiner le processus
-#draw.draw(b)
+#draw.draw(b,xcontour,ycontour)
