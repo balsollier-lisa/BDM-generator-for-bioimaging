@@ -7,4 +7,4 @@ You will find three folders:
 
 -the second one, called simple-example, contains a python file which allows to fix the characteristics and then to simulate a simple example: particles moving on the square [-1,1]x[-1,1] and all following a Brownian motion.
 
--The third one, entitled real-example, contains all the data necessary to simulate the example presented in the article.
+-the third one, entitled real-example, contains all the data necessary to simulate the example presented in the article.
