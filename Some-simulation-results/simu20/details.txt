@@ -1,0 +1,14 @@
+ number of births = 1217
+ number of deaths = 1239
+ number of births which are Langerin brownian = 595
+ number of births which are Langerin superdiffusive = 78
+ number of births which are Langerin subdiffusive = 92
+ number of births which are Rab11 brownian = 343
+ number of births which are Rab11 superdiffusive = 25
+ number of births which are Rab11 subdiffusive = 84
+ number of deaths which are Langerin brownian = 600
+ number of deaths which are Langerin superdiffusive = 81
+ number of detahs which are Langerin subdiffusive = 89
+ number of deaths which are Rab11 brownian = 354
+ number of deaths which are Rab11 superdiffusive = 28
+ number of deaths which are Rab11 subdiffusive = 87
