@@ -241,10 +241,9 @@ def proctotal(T,M,d, Delta, generatesituation, move, beta, delta, tau, alpha, bi
     trackmort=[]
     tracknaissance=[]
     while t<T :
+        print(t)
         k=1
-        #p=[1]
         res=[]
-        #ecarts=[]
         while k!=0 :
             Deltaj=np.min([Delta,T-Tj-(k-1)*Delta])
             (resk,ecartsk,tpsk)=move(Deltaj,x,y,r,c,d)
@@ -264,21 +263,15 @@ def proctotal(T,M,d, Delta, generatesituation, move, beta, delta, tau, alpha, bi
                     tabecarts+=[ecarts]
                     t=T
                     k=0
-                    #print('la')
                 else:
-                    #taujmax=np.min([(k+1)*taumax,T-Tj])
                     k+=1
                     x=resk[-1,0::4]
                     y=resk[-1,1::4]
                     r=resk[-1,2::4]
                     c=resk[-1,3::4]
-                    #print('ici')
             else:
-                #print('jesuisla')
-                #print(Deltaj)
-                tauj=(k-1)*Delta+drawlaw(p,resk,ecartsk,tpsk,Deltaj, alpha)#+(k-1)*Delta)
+                tauj=(k-1)*Delta+drawlaw(p,resk,ecartsk,tpsk,Deltaj, alpha)
                 Tj+=tauj
-                #print(Tj)
                 TpsSauts+=[Tj]
                 i=len(tps[tauj>tps])
                 resfinal+=[res[:i,:]]
@@ -287,7 +280,6 @@ def proctotal(T,M,d, Delta, generatesituation, move, beta, delta, tau, alpha, bi
                 if (U2<= (beta(res[i-1,:])/alpha(res[i-1,:]))) :
                     cptnaissances+=1
                     (X,Y,R,C)=birthkernel(res[i-1,:])
-                    #print('naissance')
                     if R==0 :
                         if typee(C)==1 :
                             cptnlb+=1
@@ -302,21 +294,16 @@ def proctotal(T,M,d, Delta, generatesituation, move, beta, delta, tau, alpha, bi
                             cptnrsb+=1
                         else :
                             cptnrsp+=1
-                    #print(cptnaissances,cptmorts,cptnlb,cptnlsp,cptnlsb,cptnrb,cptnrsp,cptnrsb,cptmlb,cptmlsp,cptmlsb,cptmrb,cptmrsp,cptmrsb)
                     newY=np.concatenate((res[i-1,:],np.array([X,Y,R,C])))
                     track+=[track[-1]+[cpttrack+1]]
                     cpttrack+=1
                     tracknaissance+=[cpttrack]
                 elif (U2<=((beta(res[i-1,:])+tau(res[i-1,:]))/alpha(res[i-1,:]))):
-                    #print(i-1)
                     newY=transitionkernel(res[i-1,:])
                     track+=[track[-1]]
-                    #print('mutation')
                 else:
-                    #print('mort')
                     cptmorts+=1
                     newY,typemort,couleurmort,num=deathkernel(res[i-1,:])
-                    #print(typemort,couleurmort)
                     if typemort==0 :
                         if couleurmort==1 :
                             cptmlb+=1
@@ -333,14 +320,12 @@ def proctotal(T,M,d, Delta, generatesituation, move, beta, delta, tau, alpha, bi
                             cptmrsp+=1
                     trackmort+=[track[-1][num]]
                     track+=[track[-1][:num]+track[-1][num+1:]]
-                    #print(cptnaissances,cptmorts,cptnlb,cptnlsp,cptnlsb,cptnrb,cptnrsp,cptnrsb,cptmlb,cptmlsp,cptmlsb,cptmrb,cptmrsp,cptmrsb)
                 k=0  
                 t+=tauj
                 x=newY[0::4]
                 y=newY[1::4]
                 r=newY[2::4]
                 c=newY[3::4]
-            #print(k)
     compteurs=[cptnaissances,cptmorts,cptnlb,cptnlsp,cptnlsb,cptnrb,cptnrsp,cptnrsb,cptmlb,cptmlsp,cptmlsb,cptmrb,cptmrsp,cptmrsb]
     return(resfinal,TpsSauts,tabecarts,track,compteurs,tracknaissance, trackmort)    
 

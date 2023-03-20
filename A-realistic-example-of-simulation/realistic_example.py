@@ -583,18 +583,17 @@ def transitionkernel(depart):
 b=process.proctotal(T,60,d, Delta, generatesituation, move, beta, delta, tau, alpha, birthkernel, deathkernel, transitionkernel) 
 (resfinal,TpsSauts,tabecarts,track,compteurs,tracknaissance, trackmort) =b 
 
-#(trajlang,tracktrajlang,trajmutantes,trajlangdec,couleurstrajlangdec, reslangtronque, restronque, tracktronque)=
 (trajlang,tracktrajlang,trajmutantes,trajlangdec,tracktrajlangdec,couleurstrajlangdec, reslangtronque, restronque, tracktronque)=draw.trajlangtronque(tabecarts, resfinal, track)
 
 
-#pour dessiner les trajectoires
+#to draw Langerin trajectories
 draw.dessintrajlang(trajlangdec,couleurstrajlangdec, xcontour, ycontour)    
 
-#pour dessiner le graphique du nombre de particules par frame
-draw.moyparframe(reslangtronque)
+#to draw the boxplot of the number of proteins per frame
+draw.moyparframeboxplot(reslangtronque)
 
-#pour dessiner les histogrammes des longueurs des trajectoires
+#to draw histograms of the length of trajectories
 draw.longueurtraj(trajlang, trajmutantes)
 
-#pour dessiner le processus
+#to draw the process as a video
 #draw.draw(b,xcontour,ycontour)

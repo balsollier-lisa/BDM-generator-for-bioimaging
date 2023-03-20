@@ -86,7 +86,7 @@ def move(t,x,y,r,c,d) :
         res[:,4*i]=xx
         res[:,4*i+1]=yy
         cc=[1]*(N)
-        rr=[1]*(N)
+        rr=[0]*(N)
         res[:,4*i+2]=rr
         res[:,4*i+3]=cc
     return(res,ecarts,tps)
@@ -119,7 +119,7 @@ def alpha(x) :
 def birthkernel(start): 
     X=stats.uniform.rvs(loc=-1,scale=2)
     Y=stats.uniform.rvs(loc=-1,scale=2)  
-    return(X,Y,1,1)
+    return(X,Y,0,1)
 
 
 """death kernel"""
@@ -131,7 +131,7 @@ def deathkernel(start):
     tab[4*i+1]=False
     tab[4*i+2]=False
     tab[4*i+3]=False
-    return(start[tab],1,1,i)
+    return(start[tab],0,1,i)
 
 """transition kernel"""
 def transitionkernel(start): 
@@ -166,7 +166,7 @@ def generatesituation(M):
         X+=[x]
         Y+=[y]
         C+=[1]
-        R+=[1]
+        R+=[0]
     track=[[i for i in range(1,M+1)]]
     cpttrack=M
     return(X,Y,R,C,track,cpttrack)
@@ -174,9 +174,26 @@ def generatesituation(M):
 
 
 b=process.proctotal(T,10,d, Delta, generatesituation, move, beta, delta, tau, alpha, birthkernel, deathkernel, transitionkernel) 
-    
+
+(resfinal,TpsSauts,tabecarts,track,compteurs,tracknaissance, trackmort) =b   
+
+ 
 #to draw the simulation as a movie
 draw.drawsimpleex(b)
 
 
+(trajlang,tracktrajlang,trajmutantes,trajlangdec,tracktrajlangdec,couleurstrajlangdec, reslangtronque, restronque, tracktronque)=draw.trajlangtronque(tabecarts, resfinal, track)
+
+xcontour=[-1,-1,1,1,-1]
+ycontour=[-1,1,1,-1,-1]
+
+
+#to draw Langerin trajectories
+draw.dessintrajlang(trajlangdec,couleurstrajlangdec, xcontour, ycontour)    
+
+#to draw boxplots of the number of particles per frame
+draw.moyparframeboxplot(reslangtronque)
+
+#to draw histograms of the length of trajectories
+draw.longueurtraj(trajlang, trajmutantes)
 

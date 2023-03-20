@@ -197,8 +197,8 @@ def transformproctotal(resfinal,TpsSauts,tabecarts,track,compteurs,tracknaissanc
 def dessintrajlang(trajlangdec,couleurstrajlangdec, xcontour, ycontour):
     fig,ax=plt.subplots()
     #return(xinf,yinf,xmax,ymax)
-    ax.set_xlim([0,250])
-    ax.set_ylim([0,283])
+    #ax.set_xlim([0,250])
+    #ax.set_ylim([0,283])
     #plt.plot(np.array(xcontour), np.array(ycontour), linewidth=3,color='black')
     #plt.xticks([], [])
     #plt.yticks([], [])
@@ -217,19 +217,7 @@ def dessintrajlang(trajlangdec,couleurstrajlangdec, xcontour, ycontour):
     #print(ecart)
     for i in range(len(trajlangdec)):
         plt.plot(trajlangdec[i][0::3],trajlangdec[i][1::3], color=couleurstrajlangdec[i])
-    ycontourmod=[]
-    for i in range(len(ycontour)):   
-        if ycontour[i]<X0[1]:
-            ycontourmod+=[ycontour[i]-2]
-        else :
-            ycontourmod+=[ycontour[i]+2] 
-    xcontourmod=[]
-    for i in range(len(xcontour)):   
-        if xcontour[i]<X0[0]:
-            xcontourmod+=[xcontour[i]-2]
-        else :
-            xcontourmod+=[xcontour[i]+2] 
-    plt.plot(np.array(xcontourmod), np.array(ycontourmod), color='black')
+    plt.plot(np.array(xcontour), np.array(ycontour), color='black')
     plt.show()        
  
     
