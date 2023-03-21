@@ -1,7 +1,7 @@
 # Birth-Death-Move-process-generator-for-bioimaging
 
 
-You find three folders:
+You find five folders:
 
 - ''Code'' gathers all the files necessary to create and illustrate the BDM process. These programs are needed to run the examples in the other two folders. You must therefore place them in the same folder before running the simulations.
 
