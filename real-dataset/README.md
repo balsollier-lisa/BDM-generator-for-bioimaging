@@ -1,6 +1,6 @@
 # Real-dataset
 
-You find three folders : 
+In this folder, you find: 
 
 -M10_Rab11mCherry_09_GaussianWeights.mp4 and M10_LangerinYFp_09_GaussianWeights.mp4 are the raw sequence for each type of proteins.
 
