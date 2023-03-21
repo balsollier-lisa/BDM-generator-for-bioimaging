@@ -10,4 +10,4 @@ In this folder, you find:
 
 - The two .csv files containing the real data on which we rely, one for the Langerin particles and one for the Rab11. Each of the two files contains the spatial coordinates of the particles, at each frame, the number of the trajectory to which they belong, the type of motion they have (1 for Brownian, 2 for superdiffusive and 3 for subdiffusive).
 
-- the two files "trajectories_Langerin.png" and "trajectories_Rab11.png" are plots of the Langerin and Rab11 proteins trajectories (with the same color code as above) then the other .png files are plots of the Langerin proteins descriptors: the number of particles of each type per frame, the histogram of the trajectory length, etc...
+- the two files "trajectories_Langerin.png" and "trajectories_Rab11.png" are plots of the Langerin and Rab11 proteins trajectories (with the same color code as above) then the other .png files are plots of the Langerin proteins descriptors: the boxplot of the number of particles of each type per frame and the histogram of the length of trajectories.
