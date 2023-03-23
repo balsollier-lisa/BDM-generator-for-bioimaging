@@ -1,7 +1,7 @@
 # Realistic-example-of-simulation
 
-The Python file ''realistic-example.py'' contains programs that allow to define all the characteristics (displacement, intensities and kernels) of the example presented in the article where two types of particles move in a cell following three possible types of motion: a Brownian motion, a Brownian motion with linear drift and a confined motion.  
-At the end of this program, you find the command to generate the process and then the commands necessary to generate the different plots presented in the article, namely the trajectories of the process, the boxplots of the number of particles at each moment, the histograms of the length of the trajectories... 
+The Python file ''realistic-example.py'' allows to define all the characteristics of the example presented in Section 3.2 of the article, where two types of particles move in a cell following three possible motion regimes: a Brownian motion, a Brownian motion with a linear drift and a confined (Ornstein-Uhlenbeck) motion. At the end of the program, there is the command to generate the process (then the current time of simulation is displayed, up to the final time which is by default 167.86), followed by some commands to plot different descriptors of the generated process. 
 
-You have to put this program in the same folder as the files in the Code folder to run it. You will also have to put in this same folder the .pickle files of this folder so that the python programs can import them.
-When you start this program, the current time is displayed. The program ends when the current time reaches the final time of the simulation (here 167.86).
+This program calls the functions in the “Code” folder. 
+
+The pickle files are data used in the definition of the characteristics of the process.
