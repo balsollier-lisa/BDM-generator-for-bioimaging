@@ -1,14 +1,13 @@
 # Birth-Death-Move-process-generator-for-bioimaging
 
+These codes and data are part of the supporting information of the article "A generative model to synthetize spatio-temporal dynamics of biomolecules in cells" by L. Balsollier, F? Lavancier, J. Salamero and C. Kervrann (available on arXiv: https://arxiv.org/pdf/2303.06951.pdf).
 
-You find five folders:
+- ''Code'' contains the Python functions  to simulate a BDM process and plot some descriptors of the result. These programs are needed to run the examples in ''A-simple-example-of-simulation'' and  ''A-realistic-example-of-simulation''
 
-- ''Code'' gathers all the files necessary to create and illustrate the BDM process. These programs are needed to run the examples in the other two folders. You must therefore place them in the same folder before running the simulations.
+- ''A-simple-example-of-simulation'' is an illustrative example of simulation of a simple BDM process, where the particles move inside the square [-1,1]x[-1,1], each following a Brownian motion with reflective boundary conditions, and where the jumps occurs at a uniform rate. 
 
-- ''A-simple-example-of-simulation'' contains a python file which allows to fix the characteristics and then to simulate a simple example: particles moving on the square [-1,1]x[-1,1] and all following a Brownian motion.
+- ''A-realistic-example-of-simulation'' contains all materials to generate the BDM process considered in Section 3.2 in the article, and plot some descriptors. 
 
-- ''A-realistic-example-of-simulation'' contains all the data necessary to simulate the example presented in the article
+- ''Real-dataset'' contains the real-data presented in the article
 
-- ''Real-dataset'' contains the real data presented in the article
-
-- ''Some-simulation-results'' contains 10 simulation sets including the two presented in the article
+- ''Some-simulation-results'' contains several independent simulation results of the BDM process considered in Section 3.2 of the article. 
