@@ -1,7 +1,6 @@
 # A-simple-example-of-simulation
 
 
-The ''simple_example_of_simulation.py''  file contains programs that allow to define all the characteristics (move, intensities and kernels) of a simple example where the particles move on the square [-1,1]x[-1,1], all follow a Brownian motion, are born uniformly on the square and all have the same probability to die at each moment. 
-At the end of this program, you find the command to generate the process and then the command to make a video of the simulated process and then the commands necessary to generate the different plots presented in the article, namely the trajectories of the process, the boxplots of the number of particles at each moment, the histograms of the length of the trajectories... 
+The ''simple_example_of_simulation.py'' file allows to define all the characteristics of a simple example of BDM process, to generate it, and to plot some descriptors. For this example,  the particles move independently inside the square [-1,1]x[-1,1], according to a Brownian motion with reflective boundary conditions, are born uniformly in the square at a uniform rate, and all have the same probability to die at each moment. 
 
-You need to put this program in the same folder as the files in the Code folder to run it.
+This program calls the functions in the “Code” folder. 
