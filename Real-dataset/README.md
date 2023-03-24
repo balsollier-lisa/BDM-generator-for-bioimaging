@@ -8,7 +8,7 @@ In this folder, you find:
 
 - "real-data-video.mp4" gathers the two previous sequences by representing  Langerin vesicles as circles and Rab11 vesicles as triangles. Moreover, each particle is coloured with respect to its motion regime: Brownian in blue, superdiffusive in red and subdiffusive in green. 
 
-- The two .csv files are the results of the tracking procedure for each type of protein. Each files contains the spatial coordinates of the particles, at each frame, the index of the trajectory to which they belong and their motion regime (1: Brownian, 2: superdiffusive, 3: subdiffusive).
+- The two .csv files are the results of the tracking procedure for each type of protein. Each file contains the spatial coordinates of the particles, at each frame, the index of the trajectory to which they belong and their motion regime (1: Brownian, 2: superdiffusive, 3: subdiffusive).
 
 - The two images "trajectories_Langerin.png" and "trajectories_Rab11.png" depicts all trajectories of Langerin and  Rab11 proteins, tracked over the image sequences, with the same color label as above (blue: Brownian, red: superdiffusive, green: subdiffusive).  
 
