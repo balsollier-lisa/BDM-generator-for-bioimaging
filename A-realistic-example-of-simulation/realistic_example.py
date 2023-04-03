@@ -22,53 +22,17 @@ import process
 import draw
 
 
-#we import the data from the real dataset
-
-#for Langerin particles
-with open('estcoeflang.pickle', 'rb') as handle:
-    brlang, splangdiff, splangdrift = pickle.load(handle)
-    
-with open('angledev.pickle', 'rb') as handle:
-    angledev  = pickle.load(handle)
-
-s3lang=0.78 #diffusion coefficient in the subdiffusive move
-lalang=5.96 #  
-
-# for rab11 particles
-with open('estcoefrab.pickle', 'rb') as handle:
-    brrab, sprabdiff, sprabdrift  = pickle.load(handle)
-    
-s3rab=1.19 #diffusion coefficient in the subdiffusive move    
-larab=7.41 #coefficient in the Ornstein-Uhlenbeck process of subdiffusive move
 
 
-
-prbirth=(1/2.98)*np.array([2.34,0.14,0.5]) #proportions for the birth of brownian, superdiffusive, subdiffusive Rab11 (in this order)
-plbirth=(1/4.45)*np.array([3.59,0.47,0.39]) #proportions for the birth of brownian, superdiffusive, subdiffusive Langerin (in this order)
-X0=np.array([97,141.2])
-
-
-
-T=167.86 #final time of the simulation
-
-d=0.01 #size of discretization pace between 2 images
-Delta=0.2 # taumax of the alogrithm
-
-theta=1.11 #parameter of variance in the birth kernel
-q=0.069 #parameter that rules the uniform birth in the birth kernel
-
-
+"""
+Definition of auxiliary functions used in the main function process.proctotal
+"""
 
 #we load the data of the cell tour
 
 with open('maskc.pickle', 'rb') as handle:
     imgmod = pickle.load(handle)  
 
-with open('xcontour.pickle', 'rb') as handle:
-    xcontour = pickle.load(handle)  
-
-with open('ycontour.pickle', 'rb') as handle:
-    ycontour = pickle.load(handle)  
 
 
 """this program allows to say if a point is in the cell"""
@@ -579,21 +543,71 @@ def transitionkernel(depart):
     return(x)
 
 
+"""
+Main: Simulation
+"""
 
-b=process.proctotal(T,60,d, Delta, generatesituation, move, beta, delta, tau, alpha, birthkernel, deathkernel, transitionkernel) 
+
+#General parameters
+T=167.86 #final time of the simulation
+n_init= 60 # number of particles at initial time
+d=0.01 #size of discretization pace between 2 images
+Delta=0.2 # taumax of the alogrithm
+
+theta=1.11 #parameter of variance in the birth kernel
+q=0.069 #parameter that rules the uniform birth in the birth kernel
+
+#Parameters for the move: we import the data from the real dataset
+
+#for Langerin particles
+with open('estcoeflang.pickle', 'rb') as handle:
+    brlang, splangdiff, splangdrift = pickle.load(handle)
+    
+with open('angledev.pickle', 'rb') as handle:
+    angledev  = pickle.load(handle)
+
+s3lang=0.78 #diffusion coefficient in the subdiffusive move
+lalang=5.96 #  coefficient in the Ornstein-Uhlenbeck process of subdiffusive move
+
+# for rab11 particles
+with open('estcoefrab.pickle', 'rb') as handle:
+    brrab, sprabdiff, sprabdrift  = pickle.load(handle)
+    
+s3rab=1.19 #diffusion coefficient in the subdiffusive move    
+larab=7.41 #coefficient in the Ornstein-Uhlenbeck process of subdiffusive move
+
+
+#Parameters of the birth transition kernel
+prbirth=(1/2.98)*np.array([2.34,0.14,0.5]) #proportions for the birth of brownian, superdiffusive, subdiffusive Rab11 (in this order)
+plbirth=(1/4.45)*np.array([3.59,0.47,0.39]) #proportions for the birth of brownian, superdiffusive, subdiffusive Langerin (in this order)
+
+
+b=process.proctotal(T,n_init,d, Delta, generatesituation, move, beta, delta, tau, alpha, birthkernel, deathkernel, transitionkernel) 
 (resfinal,TpsSauts,tabecarts,track,compteurs,tracknaissance, trackmort) =b 
 
-(trajlang,tracktrajlang,trajmutantes,trajlangdec,tracktrajlangdec,couleurstrajlangdec, reslangtronque, restronque, tracktronque)=draw.trajlangtronque(tabecarts, resfinal, track)
 
+#extraction of the Langerin trajectories and other characteristics
+intertps=0.14 # extraction each 0.14ms (intertps=d for full extraction)
+(traj, tracktraj,trajmutantes,trajdec,tracktrajdec,couleurstrajdec, restronque,restottronque, tracktottronque)=draw.extract_traj(tabecarts, resfinal, track, 0, intertps)
 
+"""
+Post-processing: several plots concerning the Langerin channel
+"""
+ 
 #to draw Langerin trajectories
-draw.dessintrajlang(trajlangdec,couleurstrajlangdec, xcontour, ycontour)    
+with open('xcontour.pickle', 'rb') as handle:
+    xcontour = pickle.load(handle)  
 
-#to draw the boxplot of the number of proteins per frame
-draw.moyparframeboxplot(reslangtronque)
+with open('ycontour.pickle', 'rb') as handle:
+    ycontour = pickle.load(handle)  
+X0=np.array([97,141.2])
+draw.traj(trajdec,couleurstrajdec, xcontour, ycontour)    
+
+#to draw boxplots of the number of particles per frame
+draw.boxplot_mean_particles(restronque,3)
 
 #to draw histograms of the length of trajectories
-draw.longueurtraj(trajlang, trajmutantes)
+draw.length_traj(traj, trajmutantes,3)
 
-#to draw the process as a video
+#to draw the process as a video (takes some time)
 #draw.draw(b,xcontour,ycontour)

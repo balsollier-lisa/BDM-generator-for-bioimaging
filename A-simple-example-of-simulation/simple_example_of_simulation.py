@@ -19,16 +19,9 @@ import process
 import draw
 
 
-
-s1=0.02 #drift of the Brownian motion
-
-
-T=10 #final time of the simulation
-
-d=0.1 # size of the time discretization between 2 images
-
-Delta=1 # Delta of the alogrithm
-
+"""
+Definition of auxiliary functions used in the main function process.proctotal
+"""
 
 
 """this program defines the motion of the particles between jumps,
@@ -38,18 +31,20 @@ def move(t,x,y,r,c,d) :
     Parameters
     ----------
     t : FLOAT
-        time of the movement that we want to generate.
+        duration of the motion that we want to generate.
     x : ARRAY
-        vector that contains the abscissae of the points that form the initial condition.
+        vector that contains the x-coordinates of the points that form the initial condition.
     y : ARRAY
-        vector that contains the ordinates of the points that form the initial condition.
+        vector that contains the y-coordinates of the points that form the initial condition.
     d : FLOAT
         pace discretization of the motion.
 
     Returns
     -------
     res : ARRAY
-        table that contains all the coordinates of the points of the simulation. There are as many lines as there are discretizations of time t. Each lines of the array contains all the points present (in the order abscissa, ordinate).
+        table that contains all coordinates of the simulated points. 
+        There are as many lines as there are discretizations of the duration time t. 
+        Each line of the array contains all existing points at this time (in order x-coordinate, y-coordinate).
     ecarts : ARRAY
         vector that contains the time between two lines of resfinal.
     tps : ARRAY
@@ -173,27 +168,43 @@ def generatesituation(M):
 
 
 
-b=process.proctotal(T,10,d, Delta, generatesituation, move, beta, delta, tau, alpha, birthkernel, deathkernel, transitionkernel) 
+"""
+Main: Simulation
+"""
+
+s1=0.02 # drift of the Brownian motion
+T=10 # final time of the simulation
+n_init= 10 # number of particles at initial time
+d=0.1 # discretization step
+Delta=1 # small time length for piecewise simulation
+
+
+
+b=process.proctotal(T,n_init,d, Delta, generatesituation, move, beta, delta, tau, alpha, birthkernel, deathkernel, transitionkernel) 
 
 (resfinal,TpsSauts,tabecarts,track,compteurs,tracknaissance, trackmort) =b   
 
+"""
+Post-processing: several plots concerning the Langerin channel
+"""
  
 #to draw the simulation as a movie
 draw.drawsimpleex(b)
 
 
-(trajlang,tracktrajlang,trajmutantes,trajlangdec,tracktrajlangdec,couleurstrajlangdec, reslangtronque, restronque, tracktronque)=draw.trajlangtronque(tabecarts, resfinal, track)
-
-xcontour=[-1,-1,1,1,-1]
-ycontour=[-1,1,1,-1,-1]
+#extraction of the Langerin trajectories and other characteristics
+intertps=0.15 # extraction each 0.15ms (intertps=d for full extraction)
+(traj, tracktraj,trajmutantes,trajdec,tracktrajdec,couleurstrajdec, restronque,restottronque, tracktottronque)=draw.extract_traj(tabecarts, resfinal, track, 0, intertps)
 
 
 #to draw Langerin trajectories
-draw.dessintrajlang(trajlangdec,couleurstrajlangdec, xcontour, ycontour)    
+xcontour=[-1,-1,1,1,-1]
+ycontour=[-1,1,1,-1,-1]
+draw.traj(trajdec,couleurstrajdec, xcontour, ycontour)    
 
 #to draw boxplots of the number of particles per frame
-draw.moyparframeboxplot(reslangtronque)
+draw.boxplot_mean_particles(restronque,1)
 
 #to draw histograms of the length of trajectories
-draw.longueurtraj(trajlang, trajmutantes)
+draw.length_traj(traj, trajmutantes,1)
 

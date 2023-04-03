@@ -116,7 +116,7 @@ def extract_traj(tabecarts, resfinal, track, ty, intertps):
         for x in resfinal[tab[0]][tab[1],2::4]==ty :
             choix+=[x]*4
         restronque+=[resfinal[tab[0]][tab[1],:][np.array(choix)]]
-        tracktronque+=[np.array(track[tab[0]])[resfinal[tab[0]][tab[1],2::4]==ty]]
+        tracktronque+=[np.array(track[tab[0]])[resfinal[tab[0]][tab[1],2::4]==0]]
     
     restottronque=[]
     tracktottronque=[]
@@ -143,7 +143,6 @@ def extract_traj(tabecarts, resfinal, track, ty, intertps):
         if len(sstraj)!=0:
             traj+=[sstraj]
             tracktraj+=[j]
-        
     trajmutantes=[]   
     trajdec=[]
     couleurstrajdec=[]
