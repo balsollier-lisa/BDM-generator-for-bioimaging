@@ -1,13 +1,17 @@
 # Real-dataset
 
-In this folder, you find: 
+In this folder, you find:
 
 - "M10_Rab11mCherry_09_GaussianWeights.mp4" and "M10_LangerinYFp_09_GaussianWeights.mp4" are the raw sequence for each type of proteins.
 
 - "Utrack_Langerin_GaussianWeights.mp4" and "Utrack_Rab11_GaussianWeights.mp4" are the result of proteins tracking (by the U-track algorithm) for the previous sequences.
 
-- "real-data-video.mp4" is also the result of the traceability of proteins but adding the result of the type of movement followed by each protein: we find in blue the Brownian particles, in red the superdiffusive ones, in green the subdiffusive ones and the Langerin ones are represented by a point while the Rab11 are represented by a triangle.
+- "real-data-video.mp4" gathers the two previous sequences by representing  Langerin vesicles as circles and Rab11 vesicles as triangles. Moreover, each particle is coloured with respect to its motion regime: Brownian in blue, superdiffusive in red and subdiffusive in green. 
 
-- The two .csv files containing the real data on which we rely, one for the Langerin particles and one for the Rab11. Each of the two files contains the spatial coordinates of the particles, at each frame, the number of the trajectory to which they belong, the type of motion they have (1 for Brownian, 2 for superdiffusive and 3 for subdiffusive).
+- The two .csv files are the results of the tracking procedure for each type of protein. Each file contains the spatial coordinates of the particles, at each frame, the index of the trajectory to which they belong and their motion regime (1: Brownian, 2: superdiffusive, 3: subdiffusive).
 
-- the two files "trajectories_Langerin.png" and "trajectories_Rab11.png" are plots of the Langerin and Rab11 proteins trajectories (with the same color code as above) then the other .png files are plots of the Langerin proteins descriptors: the boxplot of the number of particles of each type per frame and the histogram of the length of trajectories.
+- The two images "trajectories_Langerin.png" and "trajectories_Rab11.png" depicts all trajectories of Langerin and  Rab11 proteins, tracked over the image sequences, with the same color label as above (blue: Brownian, red: superdiffusive, green: subdiffusive).  
+
+- “number_per-frame.png” contains the boxplots of the number of particles observed in each frame, with respect to their motion regime (with the same colour label as above). 
+
+- “size_of_trajectories.png” depicts the size of all trajectories (in frames), according to their motion regime (with the same colour label as above). 
