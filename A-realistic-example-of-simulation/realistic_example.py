@@ -32,7 +32,7 @@ Definition of auxiliary functions used in the main function process.proctotal
 
 with open('maskc.pickle', 'rb') as handle:
     imgmod = pickle.load(handle)  
-
+X0=np.array([97,141.2])
 
 
 """this program allows to say if a point is in the cell"""
@@ -600,7 +600,7 @@ with open('xcontour.pickle', 'rb') as handle:
 
 with open('ycontour.pickle', 'rb') as handle:
     ycontour = pickle.load(handle)  
-X0=np.array([97,141.2])
+
 draw.traj(trajdec,couleurstrajdec, xcontour, ycontour)    
 
 #to draw boxplots of the number of particles per frame
